@@ -1,0 +1,25 @@
+rule all:
+    input:
+        'results/A_filtered_numbered.txt'
+
+rule grep_filter:
+    input:
+        starting = 'samples/A.txt'
+    output:
+        filtered = 'results/A_filtered.txt'
+    shell:
+        """
+        grep -E "^[[:alpha:]]" {input.starting} > {output.filtered}
+        """
+
+rule add_line_nums:
+    input:
+        filtered = 'results/A_filtered.txt'
+    output:
+        numbered = 'results/A_filtered_numbered.txt'
+    shell:
+        """
+        cat -b {input.filtered} > {output.numbered}
+        """
+
+

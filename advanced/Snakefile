@@ -1,0 +1,38 @@
+rule all:
+    input:
+       
+rule fastqc:
+    input:
+        
+    output:
+        
+    conda:
+        'envs/fastqc_env.yml'
+    shell:
+        """
+        
+        """
+
+rule trimmomatic:
+    input:
+       
+    output:
+        
+    conda:
+        "envs/trimmomatic_env.yml"
+    shell:
+        """
+        
+        """
+
+rule multiqc:
+    input:
+        
+    output:
+       
+    conda:
+        'envs/multiqc_env.yml'
+    shell:
+        """
+       
+        """

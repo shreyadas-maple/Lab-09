@@ -1,0 +1,25 @@
+rule all:
+    input:
+        
+
+rule samtools_sort:
+    input:
+        bam = 
+    output:
+        sorted_bam = 
+    conda: 
+        'envs/samtools_env.yml'
+    shell:
+        """
+        """
+
+rule samtools_index:
+    input:
+        sorted_bam = 
+    output:
+        bai = 
+    conda: 'envs/samtools_env.yml'
+    shell:
+        """
+        
+        """
