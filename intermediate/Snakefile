@@ -1,27 +1,31 @@
 rule all:
-    input:
+    input: "results/multiqc_report.html"
         
 
 rule fastqc:
     input:
+        fasta = "samples/{sample}.fastq.gz"
        
     output:
+        fastqc = "results/{sample}_fastqc.html"
         
     conda:
         "envs/fastqc_env.yml"
     shell:
         """
-        
+        fastqc -o results/ {input.fasta}
         """
 
 rule multiqc:
     input:
-       
+        fastqc = expand('results/{samples}_fastqc.html', samples =['sampleA', 'sampleB'])
+
     output:
+        multiqc = "results/multiqc_report.html"
         
     conda:
         "envs/multiqc_env.yml"
     shell:
         """
-        
+        multiqc results/ -o results/ 
         """

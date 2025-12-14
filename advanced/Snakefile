@@ -1,38 +1,49 @@
 rule all:
-    input:
+    input: 
+        "results/multiqc_report.html"
        
 rule fastqc:
     input:
-        
+        fasta = expand("samples/{sample}.subset.fastq.gz", sample = ['KOrep1_R1', 'KOrep1_R2', 'WTrep1_R1', 'WTrep1_R2'])
+       
     output:
+        fastqc = "results/{sample}.subset.fastqc.html"
         
     conda:
-        'envs/fastqc_env.yml'
+        "envs/fastqc_env.yml"
     shell:
         """
-        
+        fastqc -o results/ {input.fasta}
         """
 
 rule trimmomatic:
     input:
+        fasta = "samples/{sample}.subset.fastq.gz"
+        #ref = "refs/TruSeq3-PE.fa"
        
     output:
+        trimmed_reads = "results/{sample}_trimmed.fastq.gz"
         
     conda:
         "envs/trimmomatic_env.yml"
     shell:
         """
-        
+        trimmomatic PE \\
+        ${input.fasta} \\
+        ${output.trimmed_reads} \\
+        ILLUMINACLIP:TruSeq3-PE.fa:2:30:10:2:True LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36 2>${sample_id}.trim_out.log
         """
 
 rule multiqc:
     input:
-        
+        fastqc = expand('results/{samples}.subset.fastqc.html', samples =['sampleA', 'sampleB'])
+
     output:
-       
+        multiqc = "results/multiqc_report.html"
+        
     conda:
-        'envs/multiqc_env.yml'
+        "envs/multiqc_env.yml"
     shell:
         """
-       
+        multiqc results/ -o results/ 
         """

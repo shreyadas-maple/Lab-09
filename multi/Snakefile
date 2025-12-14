@@ -1,25 +1,25 @@
 rule all:
-    input:
+    input: expand('results/{sample}.sorted.bam.bai', sample=['sampleA', 'sampleB'])
         
-
 rule samtools_sort:
     input:
-        bam = 
+        bam = 'samples/{sample}.bam'
     output:
-        sorted_bam = 
+        sorted_bam = 'results/{sample}.sorted.bam'
     conda: 
         'envs/samtools_env.yml'
     shell:
         """
+        samtools sort {input.bam} > {output.sorted_bam}
         """
 
 rule samtools_index:
     input:
-        sorted_bam = 
+        sorted_bam = 'results/{sample}.sorted.bam'
     output:
-        bai = 
+        bai = 'results/{sample}.sorted.bam.bai'
     conda: 'envs/samtools_env.yml'
     shell:
         """
-        
+        samtools index {input.sorted_bam} > {output.bai}
         """
